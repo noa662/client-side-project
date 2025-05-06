@@ -1,10 +1,9 @@
 package clientServer;
 
-import data.Complaint;
-import data.Inquiry;
-import data.Question;
-import data.Request;
-
+import Data.Complaint;
+import Data.Inquiry;
+import Data.Question;
+import Data.Request;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,11 +24,11 @@ public class InquiryManagerClient {
     public InquiryManagerClient() {
         try {
             connectToServer = new Socket(SERVER_HOST, SERVER_PORT);
-            out = new ObjectOutputStream(connectToServer.getOutputStream());
-            in = new ObjectInputStream(connectToServer.getInputStream());
             System.out.println("connected to server successfully!");
+            Execute();
         } catch (IOException e) {
-            System.out.println("problem connecting to the server " + e.getMessage());
+            System.out.println("problem connecting to the server ");
+            e.printStackTrace();
         }
     }
 
@@ -50,8 +49,6 @@ public class InquiryManagerClient {
             switch (choice) {
                 case 1:
                     requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
-                    //קבלת כל הפניות??
-                    requestData.setParameters(new ArrayList<>());
                     break;
                 case 2:
                     Inquiry inquiry = addNewInquiry();
@@ -74,6 +71,7 @@ public class InquiryManagerClient {
 
     public void sendRequest(RequestData requestData) {
         try {
+            out = new ObjectOutputStream(connectToServer.getOutputStream());
             out.writeObject(requestData);
             out.flush();
         } catch (IOException e) {
@@ -82,13 +80,12 @@ public class InquiryManagerClient {
     }
 
     public ResponseData receiveResponse() {
-        ResponseData responseData;
+        ResponseData responseData=new ResponseData();
         try {
+            in = new ObjectInputStream(connectToServer.getInputStream());
             responseData = (ResponseData) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error receiving server response " + e.getMessage());
-            responseData = new ResponseData(ResponseStatus.FAIL, "error receiving server response", null);
-            return responseData;
         }
         return responseData;
     }
@@ -115,8 +112,11 @@ public class InquiryManagerClient {
                 System.out.println("invalid input. please enter a number.");
             }
         }
-        Inquiry inquiry;
+        Inquiry inquiry=null;
         switch (type) {
+            case 1:
+                inquiry = new Complaint();
+                break;
             case 2:
                 inquiry = new Request();
                 break;
@@ -124,7 +124,7 @@ public class InquiryManagerClient {
                 inquiry = new Question();
                 break;
             default:
-                inquiry = new Complaint();
+                System.out.println("invalid choise, please try again");
                 break;
         }
         inquiry.fillDataByUser();
@@ -140,6 +140,11 @@ public class InquiryManagerClient {
         } catch (IOException e) {
             System.out.println("error close the connection " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        InquiryManagerClient client=new InquiryManagerClient();
+        //client.Execute();
     }
 
 }

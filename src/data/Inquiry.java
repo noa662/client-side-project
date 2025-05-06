@@ -1,47 +1,58 @@
-package data;
+package Data;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public abstract class Inquiry {
 
-    static Integer nextCodeVal = 0;
     protected Integer code;
     protected String description;
-    protected String className;
     protected LocalDateTime creationDate;
-    protected LinkedList<String> listFiles = new LinkedList<>();
+    protected  String className;
 
-    public Integer getCode() {
-        return code;
-    }
+    public void fillDataByUser(String description,LocalDateTime creationDate){
 
-    public LocalDateTime getCreationDate(){
-        return creationDate;
-    }
-
-    public String getDescription(){
-        return description;
-    }
-
-    public Inquiry() {
+       this.description=description;
+       this.creationDate=creationDate;
     }
 
     public void fillDataByUser() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("insert description:");
         this.description = scanner.nextLine();
-        this.code = nextCodeVal++;
         this.creationDate = LocalDateTime.now();
-        System.out.println("insert name of files or enter to end");
-        while (true) {
-            String file = scanner.nextLine();
-            if (file.isEmpty())
-                break;
-            listFiles.add(file);
-        }
     }
 
+    public Inquiry(String description){
+
+        fillDataByUser(description,LocalDateTime.now());
+        this.className=this.getClass().getName();
+    }
+    public Inquiry(){};
+
     public abstract void handling();
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
 }

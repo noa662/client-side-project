@@ -1,41 +1,35 @@
-package data;
+package Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
-public class Complaint extends Inquiry implements IForSaving {
+public class Complaint extends Inquiry implements data.IForSaving {
 
-    private String assignedBranch;
-    Scanner scanner = new Scanner(System.in);
+    String assignedBranch;
 
-    public String getAssignedBranch(){
-        return assignedBranch;
+    public void fillDataByUser(String description, LocalDateTime creationDate,String assignedBranch){
+        super.fillDataByUser(description,creationDate);
+        this.assignedBranch=assignedBranch;
+    }
+
+    public Complaint(String description,String assignedBranch) {
+        super(description);
+        this.assignedBranch=assignedBranch;
     }
 
     public Complaint() {
-        super();
-        fillDataByUser();
-    }
-
-    @Override
-    public void fillDataByUser() {
-        className = this.getClass().getSimpleName();
-        super.fillDataByUser();
-        System.out.println("insert name of assigned branch:");
-        this.assignedBranch = scanner.nextLine();
-        //System.out.println("Complaint Inquiry created successfully!");
+        super("description");
+        this.assignedBranch="assignedBranch";
     }
 
     @Override
     public void handling() {
-        System.out.println(getClass().getSimpleName() + " Num." + code + " assigned to branch: " + assignedBranch);
+        System.out.println("...handling complain inquiry code "+code);
     }
 
     @Override
     public String getFolderName() {
-        return getClass().getSimpleName();
+        return "Complaints";
     }
 
     @Override
@@ -45,20 +39,15 @@ public class Complaint extends Inquiry implements IForSaving {
 
     @Override
     public String getData() {
-        return className + "," + code + "," + creationDate + "," + description + "," + assignedBranch;
+        return className+","+code+","+description+","+assignedBranch;
     }
 
     @Override
-    public void parseFromFile(List<String> str) {
-        className = str.get(0);
-        code = Integer.parseInt(str.get(1));
-        nextCode(code);
-        creationDate= LocalDateTime.parse(str.get(2));
-        description = str.get(3);
-        assignedBranch=str.get(4);
+    public void parseFromFile(List<String> values) {
+        className=values.get(0);
+        code=Integer.parseInt(values.get(1));
+        description=values.get(2);
+        assignedBranch=values.get(3);
     }
 
-    public synchronized void nextCode(int code) {
-        nextCodeVal = Math.max(nextCodeVal, code + 1);
-    }
 }

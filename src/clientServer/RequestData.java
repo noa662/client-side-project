@@ -1,7 +1,5 @@
 package clientServer;
 
-import data.Inquiry;
-
 import java.util.List;
 
 public class RequestData {
