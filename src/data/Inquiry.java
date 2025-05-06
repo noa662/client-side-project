@@ -1,9 +1,10 @@
-package Data;
+package data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-public abstract class Inquiry {
+public abstract class Inquiry implements Serializable, data.IForSaving{
 
     protected Integer code;
     protected String description;

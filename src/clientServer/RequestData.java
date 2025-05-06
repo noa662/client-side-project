@@ -1,16 +1,17 @@
 package clientServer;
 
-import java.util.List;
 
-public class RequestData {
+import java.io.Serializable;
+
+public class RequestData implements Serializable {
 
     private InquiryManagerActions action;
-    private List<Object> parameters;
+    private Object[] parameters;
 
     public RequestData() {
     }
 
-    public RequestData(InquiryManagerActions action, List<Object> parameters) {
+    public RequestData(InquiryManagerActions action, Object[] parameters) {
         this.action = action;
         this.parameters = parameters;
     }
@@ -19,7 +20,7 @@ public class RequestData {
         return action;
     }
 
-    public List<Object> getParameters() {
+    public Object[] getParameters() {
         return parameters;
     }
 
@@ -27,7 +28,7 @@ public class RequestData {
         this.action = action;
     }
 
-    public void setParameters(List<Object> parameters) {
+    public void setParameters(Object... parameters) {
         this.parameters = parameters;
     }
 }

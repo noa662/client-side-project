@@ -1,15 +1,13 @@
 package clientServer;
 
-import Data.Complaint;
-import Data.Inquiry;
-import Data.Question;
-import Data.Request;
+import data.Complaint;
+import data.Inquiry;
+import data.Question;
+import data.Request;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class InquiryManagerClient {
@@ -53,7 +51,7 @@ public class InquiryManagerClient {
                 case 2:
                     Inquiry inquiry = addNewInquiry();
                     requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
-                    requestData.setParameters(List.of(inquiry));
+                    requestData.setParameters((Object) inquiry);
                     break;
                 case 3:
                     System.out.println("exit..");

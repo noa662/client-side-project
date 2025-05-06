@@ -1,6 +1,8 @@
 package clientServer;
 
-public class ResponseData {
+import java.io.Serializable;
+
+public class ResponseData implements Serializable {
 
     private ResponseStatus status;
     private String message;

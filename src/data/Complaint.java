@@ -1,9 +1,9 @@
-package Data;
+package data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Complaint extends Inquiry implements data.IForSaving {
+public class Complaint extends data.Inquiry {
 
     String assignedBranch;
 
