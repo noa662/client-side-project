@@ -1,9 +1,10 @@
 package data;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Complaint extends data.Inquiry {
+public class Complaint extends Inquiry {
 
     String assignedBranch;
 

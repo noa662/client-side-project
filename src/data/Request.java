@@ -1,7 +1,7 @@
 package data;
 import java.util.List;
 
-public class Request extends data.Inquiry
+public class Request extends Inquiry
 {
     @Override
     public void handling() {

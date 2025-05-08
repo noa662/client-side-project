@@ -2,7 +2,7 @@ package data;
 
 import java.util.List;
 
-public class Question extends data.Inquiry {
+public class Question extends Inquiry {
     @Override
     public void handling() {
         System.out.println("...handling question inquiry code "+code);

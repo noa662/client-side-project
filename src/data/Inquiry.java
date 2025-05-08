@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-public abstract class Inquiry implements Serializable, data.IForSaving{
+public abstract class Inquiry implements IForSaving, Serializable {
 
+    private static final long serialVersionUID = 1L;
     protected Integer code;
     protected String description;
     protected LocalDateTime creationDate;

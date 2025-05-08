@@ -1,6 +1,6 @@
 package clientServer;
 
 public enum ResponseStatus {
-    SCCESS,
+    SUCCESS,
     FAIL
 }
