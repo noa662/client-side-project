@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public abstract class Inquiry {
 
-    static Integer nextCodeVal = 0;
     protected Integer code;
     protected String description;
     protected String className;
@@ -32,7 +31,6 @@ public abstract class Inquiry {
         Scanner scanner = new Scanner(System.in);
         System.out.println("insert description:");
         this.description = scanner.nextLine();
-        this.code = nextCodeVal++;
         this.creationDate = LocalDateTime.now();
         System.out.println("insert name of files or enter to end");
         while (true) {
