@@ -52,13 +52,10 @@ public class Complaint extends Inquiry implements IForSaving {
     public void parseFromFile(List<String> str) {
         className = str.get(0);
         code = Integer.parseInt(str.get(1));
-        nextCode(code);
         creationDate= LocalDateTime.parse(str.get(2));
         description = str.get(3);
         assignedBranch=str.get(4);
     }
 
-    public synchronized void nextCode(int code) {
-        nextCodeVal = Math.max(nextCodeVal, code + 1);
-    }
+
 }

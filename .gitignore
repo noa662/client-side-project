@@ -80,3 +80,18 @@ bin/
 ### Mac OS ###
 .DS_Store
 >>>>>>> ec832d7 (Client-side upload)
+
+# Ignore IntelliJ project files
+.idea/
+*.iml
+
+# Ignore OS/system files
+.DS_Store
+Thumbs.db
+
+# (אם זה פרויקט Node.js)
+node_modules/
+dist/
+build/
+.env
+

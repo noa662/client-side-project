@@ -50,8 +50,6 @@ public class InquiryManagerClient {
             switch (choice) {
                 case 1:
                     requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
-                    //קבלת כל הפניות??
-                    requestData.setParameters(new ArrayList<>());
                     break;
                 case 2:
                     Inquiry inquiry = addNewInquiry();
@@ -141,5 +139,7 @@ public class InquiryManagerClient {
             System.out.println("error close the connection " + e.getMessage());
         }
     }
+
+    
 
 }
