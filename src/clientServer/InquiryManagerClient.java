@@ -4,6 +4,7 @@ import data.Complaint;
 import data.Inquiry;
 import data.Question;
 import data.Request;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,35 +33,41 @@ public class InquiryManagerClient {
 
     public void Execute() {
         int choice = 0;
-            System.out.println("select an action:");
-            System.out.println("show all inquiries -> 1");
-            System.out.println("add new inquiry -> 2");
-            System.out.println("exit -> 3");
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
+        System.out.println("select an action:");
+        System.out.println("show all inquiries -> 1");
+        System.out.println("add new inquiry -> 2");
+        System.out.println("to cancel inquiry -> 3");
+        System.out.println("exit -> 4");
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("invalid input! please try again");
+        }
+        RequestData requestData = new RequestData();
+        switch (choice) {
+            case 1:
+                requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
+                break;
+            case 2:
+                Inquiry inquiry = addNewInquiry();
+                requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
+                requestData.setParameters((Object) inquiry);
+                break;
+            case 3:
+                requestData.setAction(InquiryManagerActions.CANCLE_INQUIRY);
+                System.out.println("Insert Inquiry code");
+                int code= Integer.parseInt(scanner.nextLine());
+                requestData.setParameters(code);
+            case 4:
+                System.out.println("exit..");
+                closeConnection();
+                return;
+            default:
                 System.out.println("invalid input! please try again");
-            }
-            RequestData requestData = new RequestData();
-            switch (choice) {
-                case 1:
-                    requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
-                    break;
-                case 2:
-                    Inquiry inquiry = addNewInquiry();
-                    requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
-                    requestData.setParameters((Object) inquiry);
-                    break;
-                case 3:
-                    System.out.println("exit..");
-                    closeConnection();
-                    return;
-                default:
-                    System.out.println("invalid input! please try again");
-            }
-            sendRequest(requestData);
-            ResponseData responseData = receiveResponse();
-            printResponse(responseData);
+        }
+        sendRequest(requestData);
+        ResponseData responseData = receiveResponse();
+        printResponse(responseData);
     }
 
     public void sendRequest(RequestData requestData) {
@@ -74,7 +81,7 @@ public class InquiryManagerClient {
     }
 
     public ResponseData receiveResponse() {
-        ResponseData responseData=new ResponseData();
+        ResponseData responseData = new ResponseData();
         try {
             in = new ObjectInputStream(connectToServer.getInputStream());
             responseData = (ResponseData) in.readObject();
@@ -107,7 +114,7 @@ public class InquiryManagerClient {
                 System.out.println("invalid input. please enter a number.");
             }
         }
-        Inquiry inquiry=null;
+        Inquiry inquiry = null;
         switch (type) {
             case 1:
                 inquiry = new Complaint();
@@ -137,7 +144,7 @@ public class InquiryManagerClient {
     }
 
     public static void main(String[] args) {
-        InquiryManagerClient client=new InquiryManagerClient();
+        InquiryManagerClient client = new InquiryManagerClient();
         client.Execute();
     }
 
