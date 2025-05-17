@@ -32,7 +32,6 @@ public class InquiryManagerClient {
 
     public void Execute() {
         int choice = 0;
-        while (choice != 3) {
             System.out.println("select an action:");
             System.out.println("show all inquiries -> 1");
             System.out.println("add new inquiry -> 2");
@@ -41,7 +40,6 @@ public class InquiryManagerClient {
                 choice = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("invalid input! please try again");
-                continue;
             }
             RequestData requestData = new RequestData();
             switch (choice) {
@@ -59,19 +57,17 @@ public class InquiryManagerClient {
                     return;
                 default:
                     System.out.println("invalid input! please try again");
-                    continue;
             }
             sendRequest(requestData);
             ResponseData responseData = receiveResponse();
             printResponse(responseData);
-        }
     }
 
     public void sendRequest(RequestData requestData) {
         try {
             out = new ObjectOutputStream(connectToServer.getOutputStream());
             out.writeObject(requestData);
-            out.flush();
+            out.close();
         } catch (IOException e) {
             System.out.println("error sending request to server " + e.getMessage());
         }
@@ -82,6 +78,7 @@ public class InquiryManagerClient {
         try {
             in = new ObjectInputStream(connectToServer.getInputStream());
             responseData = (ResponseData) in.readObject();
+            in.close();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error receiving server response " + e.getMessage());
         }
@@ -133,7 +130,6 @@ public class InquiryManagerClient {
         try {
             in.close();
             out.close();
-            connectToServer.close();
             System.out.println("connection to the server was closed.");
         } catch (IOException e) {
             System.out.println("error close the connection " + e.getMessage());
@@ -142,7 +138,7 @@ public class InquiryManagerClient {
 
     public static void main(String[] args) {
         InquiryManagerClient client=new InquiryManagerClient();
-        //client.Execute();
+        client.Execute();
     }
 
 }
