@@ -135,6 +135,16 @@ public class InquiryManagerClient {
 
     public void closeConnection() {
         try {
+            if (out != null) out.close();
+            if (in != null) in.close();
+            if (connectToServer != null) connectToServer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeConnection2() {
+        try {
             in.close();
             out.close();
             System.out.println("connection to the server was closed.");
