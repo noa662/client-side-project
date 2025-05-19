@@ -66,8 +66,9 @@ public class InquiryManagerClient {
     public void sendRequest(RequestData requestData) {
         try {
             out = new ObjectOutputStream(connectToServer.getOutputStream());
+            out.flush();
             out.writeObject(requestData);
-            out.close();
+            //out.close();
         } catch (IOException e) {
             System.out.println("error sending request to server " + e.getMessage());
         }
