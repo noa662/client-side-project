@@ -49,7 +49,7 @@ public class InquiryManagerClient {
                 case 2:
                     Inquiry inquiry = addNewInquiry();
                     requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
-                    requestData.setParameters(inquiry);
+                    requestData.setParameters((Object) inquiry);
                     break;
                 case 3:
                     System.out.println("exit..");
@@ -61,14 +61,13 @@ public class InquiryManagerClient {
             sendRequest(requestData);
             ResponseData responseData = receiveResponse();
             printResponse(responseData);
-            closeConnection();
     }
 
     public void sendRequest(RequestData requestData) {
         try {
             out = new ObjectOutputStream(connectToServer.getOutputStream());
-            out.flush();
             out.writeObject(requestData);
+            out.close();
         } catch (IOException e) {
             System.out.println("error sending request to server " + e.getMessage());
         }
@@ -79,6 +78,7 @@ public class InquiryManagerClient {
         try {
             in = new ObjectInputStream(connectToServer.getInputStream());
             responseData = (ResponseData) in.readObject();
+            in.close();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error receiving server response " + e.getMessage());
         }
@@ -138,6 +138,7 @@ public class InquiryManagerClient {
 
     public static void main(String[] args) {
         InquiryManagerClient client=new InquiryManagerClient();
+        client.Execute();
     }
 
 }
