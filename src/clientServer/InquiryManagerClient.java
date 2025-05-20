@@ -51,13 +51,14 @@ public class InquiryManagerClient {
             case 2:
                 Inquiry inquiry = addNewInquiry();
                 requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
-                requestData.setParameters((Object) inquiry);
+                requestData.setParameters(inquiry);
                 break;
             case 3:
                 requestData.setAction(InquiryManagerActions.CANCLE_INQUIRY);
                 System.out.println("Insert Inquiry code");
                 int code= Integer.parseInt(scanner.nextLine());
                 requestData.setParameters(code);
+                break;
             case 4:
                 System.out.println("exit..");
                 closeConnection();
@@ -74,7 +75,7 @@ public class InquiryManagerClient {
         try {
             out = new ObjectOutputStream(connectToServer.getOutputStream());
             out.writeObject(requestData);
-            out.close();
+            out.flush();
         } catch (IOException e) {
             System.out.println("error sending request to server " + e.getMessage());
         }
@@ -155,7 +156,6 @@ public class InquiryManagerClient {
 
     public static void main(String[] args) {
         InquiryManagerClient client = new InquiryManagerClient();
-        client.Execute();
     }
 
 }
