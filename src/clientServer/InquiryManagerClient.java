@@ -35,13 +35,20 @@ public class InquiryManagerClient {
             System.out.println("select an action:");
             System.out.println("show all inquiries -> 1");
             System.out.println("add new inquiry -> 2");
-            System.out.println("exit -> 3");
+            System.out.println("cancel inquiry -> 3");
+            System.out.println("get status-> 4");
+            System.out.println("get representative -> 5");
+            System.out.println("get representative inquiries -> 6");
+            System.out.println("get map -> 7");
+            System.out.println("get month statistics -> 8");
+                System.out.println("exit -> 9");
             try {
                 choice = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("invalid input! please try again");
             }
             RequestData requestData = new RequestData();
+            int code;
             switch (choice) {
                 case 1:
                     requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
@@ -52,6 +59,39 @@ public class InquiryManagerClient {
                     requestData.setParameters(inquiry);
                     break;
                 case 3:
+                    System.out.println("insert the inquiry code");
+                    code=scanner.nextInt();
+                    requestData.setAction(InquiryManagerActions.CANCLE_INQUIRY);
+                    requestData.setParameters(code);
+                    break;
+                case 4:
+                    System.out.println("insert the inquiry code");
+                    code=scanner.nextInt();
+                    requestData.setAction(InquiryManagerActions.GET_STATUS);
+                    requestData.setParameters(code);
+                    break;
+                case 5:
+                    System.out.println("insert the inquiry code");
+                    code=scanner.nextInt();
+                    requestData.setAction(InquiryManagerActions.GET_REPRESENTATIVE);
+                    requestData.setParameters(code);
+                    break;
+                case 6:
+                    System.out.println("insert the representative code");
+                    code=scanner.nextInt();
+                    requestData.setAction(InquiryManagerActions.GET_REPRESENTATIVE_INQUIRIES);
+                    requestData.setParameters(code);
+                    break;
+                case 7:
+                    requestData.setAction(InquiryManagerActions.GET_MAP);
+                    break;
+                case 8:
+                    System.out.println("insert month");
+                    code=scanner.nextInt();
+                    requestData.setAction(InquiryManagerActions.GET_MONTHYFILESTATS);
+                    requestData.setParameters(code);
+                    break;
+                case 9:
                     System.out.println("exit..");
                     closeConnection();
                     return;
@@ -125,6 +165,8 @@ public class InquiryManagerClient {
         inquiry.fillDataByUser();
         return inquiry;
     }
+
+
 
     public void closeConnection() {
         try {
