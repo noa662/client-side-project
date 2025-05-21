@@ -1,6 +1,5 @@
 package data;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,15 +39,18 @@ public class Complaint extends Inquiry {
 
     @Override
     public String getData() {
-        return className+","+code+","+description+","+assignedBranch;
+        return creationDate+","+ className+","+status+","+codeRepresentative+","+code+","+description+","+assignedBranch;
     }
 
     @Override
     public void parseFromFile(List<String> values) {
-        className=values.get(0);
-        code=Integer.parseInt(values.get(1));
-        description=values.get(2);
-        assignedBranch=values.get(3);
+        creationDate= LocalDateTime.parse(values.get(0));
+        className=values.get(1);
+        status= InquiryStatus.valueOf(values.get(2));
+        codeRepresentative= Integer.parseInt(values.get(3));
+        code=Integer.parseInt(values.get(4));
+        description=values.get(5);
+        assignedBranch=values.get(6);
     }
 
 }
