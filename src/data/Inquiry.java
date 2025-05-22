@@ -6,10 +6,7 @@ import java.util.Scanner;
 
 public abstract class Inquiry implements IForSaving, Serializable {
 
-<<<<<<< HEAD
-=======
     private static final long serialVersionUID = 1L;
->>>>>>> feature/client
     protected Integer code;
     protected String description;
     protected LocalDateTime creationDate;

@@ -4,13 +4,10 @@ import data.Complaint;
 import data.Inquiry;
 import data.Question;
 import data.Request;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class InquiryManagerClient {
@@ -25,70 +22,105 @@ public class InquiryManagerClient {
     public InquiryManagerClient() {
         try {
             connectToServer = new Socket(SERVER_HOST, SERVER_PORT);
-            out = new ObjectOutputStream(connectToServer.getOutputStream());
-            in = new ObjectInputStream(connectToServer.getInputStream());
             System.out.println("connected to server successfully!");
+            Execute();
         } catch (IOException e) {
-            System.out.println("problem connecting to the server " + e.getMessage());
+            System.out.println("problem connecting to the server ");
+            e.printStackTrace();
         }
     }
 
     public void Execute() {
         int choice = 0;
-        while (choice != 3) {
-            System.out.println("select an action:");
-            System.out.println("show all inquiries -> 1");
-            System.out.println("add new inquiry -> 2");
-            System.out.println("exit -> 3");
-            try {
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("invalid input! please try again");
-                continue;
-            }
-            RequestData requestData = new RequestData();
-            switch (choice) {
-                case 1:
-                    requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
-                    //קבלת כל הפניות??
-                    requestData.setParameters(new ArrayList<>());
-                    break;
-                case 2:
-                    Inquiry inquiry = addNewInquiry();
-                    requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
-                    requestData.setParameters(List.of(inquiry));
-                    break;
-                case 3:
-                    System.out.println("exit..");
-                    closeConnection();
-                    return;
-                default:
-                    System.out.println("invalid input! please try again");
-                    continue;
-            }
-            sendRequest(requestData);
-            ResponseData responseData = receiveResponse();
-            printResponse(responseData);
+        System.out.println("select an action:");
+        System.out.println("show all inquiries -> 1");
+        System.out.println("add new inquiry -> 2");
+        System.out.println("cancel inquiry -> 3");
+        System.out.println("get status-> 4");
+        System.out.println("get representative -> 5");
+        System.out.println("get representative inquiries -> 6");
+        System.out.println("get map -> 7");
+        System.out.println("get month statistics -> 8");
+        System.out.println("exit -> 9");
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("invalid input! please try again");
         }
+        RequestData requestData = new RequestData();
+        int code;
+        switch (choice) {
+            case 1:
+                requestData.setAction(InquiryManagerActions.ALL_INQUIRY);
+                break;
+            case 2:
+                Inquiry inquiry = addNewInquiry();
+                requestData.setAction(InquiryManagerActions.ADD_INQUIRY);
+                requestData.setParameters(inquiry);
+                break;
+            case 3:
+                System.out.println("insert the inquiry code");
+                code=scanner.nextInt();
+                requestData.setAction(InquiryManagerActions.CANCLE_INQUIRY);
+                requestData.setParameters(code);
+                break;
+            case 4:
+                System.out.println("insert the inquiry code");
+                code=scanner.nextInt();
+                requestData.setAction(InquiryManagerActions.GET_STATUS);
+                requestData.setParameters(code);
+                break;
+            case 5:
+                System.out.println("insert the inquiry code");
+                code=scanner.nextInt();
+                requestData.setAction(InquiryManagerActions.GET_REPRESENTATIVE);
+                requestData.setParameters(code);
+                break;
+            case 6:
+                System.out.println("insert the representative code");
+                code=scanner.nextInt();
+                requestData.setAction(InquiryManagerActions.GET_REPRESENTATIVE_INQUIRIES);
+                requestData.setParameters(code);
+                break;
+            case 7:
+                requestData.setAction(InquiryManagerActions.GET_MAP);
+                break;
+            case 8:
+                System.out.println("insert month");
+                code=scanner.nextInt();
+                requestData.setAction(InquiryManagerActions.GET_MONTHYFILESTATS);
+                requestData.setParameters(code);
+                break;
+            case 9:
+                System.out.println("exit..");
+                closeConnection();
+                return;
+            default:
+                System.out.println("invalid input! please try again");
+        }
+        sendRequest(requestData);
+        ResponseData responseData = receiveResponse();
+        printResponse(responseData);
+        closeConnection();
     }
 
     public void sendRequest(RequestData requestData) {
         try {
-            out.writeObject(requestData);
+            out = new ObjectOutputStream(connectToServer.getOutputStream());
             out.flush();
+            out.writeObject(requestData);
         } catch (IOException e) {
             System.out.println("error sending request to server " + e.getMessage());
         }
     }
 
     public ResponseData receiveResponse() {
-        ResponseData responseData;
+        ResponseData responseData=new ResponseData();
         try {
+            in = new ObjectInputStream(connectToServer.getInputStream());
             responseData = (ResponseData) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("error receiving server response " + e.getMessage());
-            responseData = new ResponseData(ResponseStatus.FAIL, "error receiving server response", null);
-            return responseData;
         }
         return responseData;
     }
@@ -115,8 +147,11 @@ public class InquiryManagerClient {
                 System.out.println("invalid input. please enter a number.");
             }
         }
-        Inquiry inquiry;
+        Inquiry inquiry=null;
         switch (type) {
+            case 1:
+                inquiry = new Complaint();
+                break;
             case 2:
                 inquiry = new Request();
                 break;
@@ -124,22 +159,27 @@ public class InquiryManagerClient {
                 inquiry = new Question();
                 break;
             default:
-                inquiry = new Complaint();
+                System.out.println("invalid choise, please try again");
                 break;
         }
         inquiry.fillDataByUser();
         return inquiry;
     }
 
+
+
     public void closeConnection() {
         try {
             in.close();
             out.close();
-            connectToServer.close();
             System.out.println("connection to the server was closed.");
         } catch (IOException e) {
             System.out.println("error close the connection " + e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        InquiryManagerClient client=new InquiryManagerClient();
     }
 
 }

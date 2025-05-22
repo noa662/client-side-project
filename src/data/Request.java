@@ -3,27 +3,19 @@ package data;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Request extends Inquiry implements IForSaving{
-
-    public Request() {
-        fillDataByUser();
-    }
-
-    @Override
-    public void fillDataByUser() {
-        className = this.getClass().getSimpleName();
-        super.fillDataByUser();
-        //System.out.println("Request Inquiry created successfully!");
-    }
-
+public class Request extends Inquiry {
     @Override
     public void handling() {
-        System.out.println(getClass().getSimpleName() + " Num." + code);
+        System.out.println("...handling request inquiry code "+code);
     }
+
+    public Request(String description) { super(description);}
+
+    public Request() { super("description");}
 
     @Override
     public String getFolderName() {
-        return getClass().getSimpleName();
+        return "Requests";
     }
 
     @Override
@@ -33,20 +25,17 @@ public class Request extends Inquiry implements IForSaving{
 
     @Override
     public String getData() {
-        return className + "," + code + "," + creationDate + "," + description;
+        return creationDate+","+ className+","+status+","+codeRepresentative+","+code+","+description;
     }
 
     @Override
-    public void parseFromFile(List<String> str) {
-        className = str.get(0);
-        code = Integer.parseInt(str.get(1));
-        nextCode(code);
-        creationDate= LocalDateTime.parse(str.get(2));
-        description = str.get(3);
+    public void parseFromFile(List<String> values) {
+        creationDate= LocalDateTime.parse(values.get(0));
+        className=values.get(1);
+        status= InquiryStatus.valueOf(values.get(2));
+        codeRepresentative= Integer.parseInt(values.get(3));
+        code=Integer.parseInt(values.get(4));
+        description=values.get(5);
     }
 
-    public synchronized void nextCode(int code){
-        nextCodeVal = Math.max(nextCodeVal, code + 1);
-    }
 }
-
